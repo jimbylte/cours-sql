@@ -1,0 +1,425 @@
+Microsoft Windows [version 10.0.19044.2486]
+(c) Microsoft Corporation. Tous droits réservés.
+
+C:\Users\utilisateur>mysql -u root -p
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 64
+Server version: 10.4.24-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> showdatabase
+    -> show databases
+    -> SHOWDATABASES.
+    -> SHOWDATABASES;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'showdatabase
+show databases
+SHOWDATABASES.
+SHOWDATABASES' at line 1
+MariaDB [(none)]> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| montagnes          |
+| multiculturel      |
+| mysql              |
+| performance_schema |
+| phpmyadmin         |
+| test               |
++--------------------+
+7 rows in set (0.001 sec)
+
+MariaDB [(none)]> CREATE DATABASE pizza CHARACTER SET 'utf8';
+Query OK, 1 row affected (0.002 sec)
+
+MariaDB [(none)]> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| montagnes          |
+| multiculturel      |
+| mysql              |
+| performance_schema |
+| phpmyadmin         |
+| pizza              |
+| test               |
++--------------------+
+8 rows in set (0.001 sec)
+
+MariaDB [(none)]> USE pizza;
+Database changed
+MariaDB [pizza]> drop database if exists pizza;.
+Query OK, 0 rows affected (0.037 sec)
+
+
+MariaDB [(none)]>  CREATE DATABASE pizza character set 'utf8';
+Query OK, 1 row affected (0.002 sec)
+
+MariaDB [(none)]> drop database if exists pizza;
+Query OK, 0 rows affected (0.002 sec)
+
+MariaDB [(none)]> create database entreprise character set 'utf8';
+Query OK, 1 row affected (0.002 sec)
+
+MariaDB [(none)]> use entreprise;
+Database changed
+MariaDB [entreprise]> create table if exiByeCtrl-C -- exit!
+
+
+C:\Users\utilisateur>mysql -u root -p
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 89
+Server version: 10.4.24-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> use entreprise;
+Database changed
+MariaDB [entreprise]> create table if not exists employes (id_employes int(3) NOT NULL AUTO_INCREMENT, prenom varchar(20) DEFAULT NULL, nom varchar(20) DEFAULT NULL, genre enum('f','m') NOT NULL, service varchar(30) DEFAULT NULL, date_embauche date DEFAULT NULL, salaire float DEFAULT NULL, PRIMARY KEY (id_employes)) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+Query OK, 0 rows affected (0.050 sec)
+
+MariaDB [entreprise]> SELECT * FROM employes;
+Empty set (0.001 sec)
+
+MariaDB [entreprise]> SELECT * FROM employes;
+Empty set (0.001 sec)
+
+MariaDB [entreprise]> INSERT INTO employes (id_employes, prenom, nom, genre, service, date_embauche, salaire) VALUES(350, 'Jean-pierre', 'Laborde', 'm', 'direction', '1999-12-09', 5000),(388, 'Clement', 'Gallet', 'm', 'commercial', '2000-01-15', 2300),(415, 'Thomas', 'Winter', 'm', 'commercial', '2000-05-03', 3550),(417, 'Chloe', 'Dubar', 'f', 'production', '2001-09-05', 1900),(491, 'Elodie', 'Fellier', 'f', 'secretariat', '2002-02-22', 1600),(509, 'Fabrice', 'Grand', 'm', 'comptabilite', '2003-02-20', 1900),(547, 'Melanie', 'Collier', 'f', 'commercial', '2004-09-08', 3100),(592, 'Laura', 'Blanchet', 'f', 'direction', '2005-06-09', 4500),(627, 'Guillaume', 'Miller', 'm', 'commercial', '2006-07-02', 1900),(655, 'Celine', 'Perrin', 'f', 'commercial', '2006-09-10', 2700),(699, 'Julien', 'Cottet', 'm', 'secretariat', '2007-01-18', 1390),(701, 'Mathieu', 'Vignal', 'm', 'informatique', '2008-12-03', 2000),(739, 'Thierry', 'Desprez', 'm', 'secretariat', '2009-11-17', 1500),(780, 'Amandine', 'Thoyer', 'f', 'communication', '2010-01-23', 1500),(802, 'Damien', 'Durand', 'm', 'informatique', '2010-07-05', 2250),(854, 'Daniel', 'Chevel', 'm', 'informatique', '2011-09-28', 1700),(876, 'Nathalie', 'Martin', 'f', 'juridique', '2012-01-12', 3200),(900, 'Benoit', 'Lagarde', 'm', 'production', '2013-01-03', 2550),(933, 'Emilie', 'Sennard', 'f', 'commercial', '2014-09-11', 1800),(990, 'Stephanie', 'Lafaye', 'f', 'assistant', '2015-06-02', 1775);
+Query OK, 20 rows affected (0.004 sec)
+Records: 20  Duplicates: 0  Warnings: 0
+
+MariaDB [entreprise]> SELECT*FROM employes;
++-------------+-------------+----------+-------+---------------+---------------+---------+
+| id_employes | prenom      | nom      | genre | service       | date_embauche | salaire |
++-------------+-------------+----------+-------+---------------+---------------+---------+
+|         350 | Jean-pierre | Laborde  | m     | direction     | 1999-12-09    |    5000 |
+|         388 | Clement     | Gallet   | m     | commercial    | 2000-01-15    |    2300 |
+|         415 | Thomas      | Winter   | m     | commercial    | 2000-05-03    |    3550 |
+|         417 | Chloe       | Dubar    | f     | production    | 2001-09-05    |    1900 |
+|         491 | Elodie      | Fellier  | f     | secretariat   | 2002-02-22    |    1600 |
+|         509 | Fabrice     | Grand    | m     | comptabilite  | 2003-02-20    |    1900 |
+|         547 | Melanie     | Collier  | f     | commercial    | 2004-09-08    |    3100 |
+|         592 | Laura       | Blanchet | f     | direction     | 2005-06-09    |    4500 |
+|         627 | Guillaume   | Miller   | m     | commercial    | 2006-07-02    |    1900 |
+|         655 | Celine      | Perrin   | f     | commercial    | 2006-09-10    |    2700 |
+|         699 | Julien      | Cottet   | m     | secretariat   | 2007-01-18    |    1390 |
+|         701 | Mathieu     | Vignal   | m     | informatique  | 2008-12-03    |    2000 |
+|         739 | Thierry     | Desprez  | m     | secretariat   | 2009-11-17    |    1500 |
+|         780 | Amandine    | Thoyer   | f     | communication | 2010-01-23    |    1500 |
+|         802 | Damien      | Durand   | m     | informatique  | 2010-07-05    |    2250 |
+|         854 | Daniel      | Chevel   | m     | informatique  | 2011-09-28    |    1700 |
+|         876 | Nathalie    | Martin   | f     | juridique     | 2012-01-12    |    3200 |
+|         900 | Benoit      | Lagarde  | m     | production    | 2013-01-03    |    2550 |
+|         933 | Emilie      | Sennard  | f     | commercial    | 2014-09-11    |    1800 |
+|         990 | Stephanie   | Lafaye   | f     | assistant     | 2015-06-02    |    1775 |
++-------------+-------------+----------+-------+---------------+---------------+---------+
+20 rows in set (0.001 sec)
+
+MariaDB [entreprise]> SELECT prenom, nom FROM omployes;
+ERROR 1146 (42S02): Table 'entreprise.omployes' doesn't exist
+MariaDB [entreprise]> SELECT prenom, nom FROM employes;
++-------------+----------+
+| prenom      | nom      |
++-------------+----------+
+| Jean-pierre | Laborde  |
+| Clement     | Gallet   |
+| Thomas      | Winter   |
+| Chloe       | Dubar    |
+| Elodie      | Fellier  |
+| Fabrice     | Grand    |
+| Melanie     | Collier  |
+| Laura       | Blanchet |
+| Guillaume   | Miller   |
+| Celine      | Perrin   |
+| Julien      | Cottet   |
+| Mathieu     | Vignal   |
+| Thierry     | Desprez  |
+| Amandine    | Thoyer   |
+| Damien      | Durand   |
+| Daniel      | Chevel   |
+| Nathalie    | Martin   |
+| Benoit      | Lagarde  |
+| Emilie      | Sennard  |
+| Stephanie   | Lafaye   |
++-------------+----------+
+20 rows in set (0.001 sec)
+
+SELECT*prenom FROM EMPLOYES' at line 1
+MariaDB [entreprise]> SELECT DISTINCT (service) FROM EMPLOYES;
++---------------+
+| service       |
++---------------+
+| direction     |
+| commercial    |
+| production    |
+| secretariat   |
+| comptabilite  |
+| informatique  |
+| communication |
+| juridique     |
+| assistant     |
++---------------+
+9 rows in set (0.001 sec)
+
+MariaDB [entreprise]> SELECT SALAIRE FROM EMPLOYES;
++---------+
+| SALAIRE |
++---------+
+|    5000 |
+|    2300 |
+|    3550 |
+|    1900 |
+|    1600 |
+|    1900 |
+|    3100 |
+|    4500 |
+|    1900 |
+|    2700 |
+|    1390 |
+|    2000 |
+|    1500 |
+|    1500 |
+|    2250 |
+|    1700 |
+|    3200 |
+|    2550 |
+|    1800 |
+|    1775 |
++---------+
+20 rows in set (0.001 sec)
+
+MariaDB [entreprise]> SELECT DISTINCT (salaire) FROM EMPLOYES;
++---------+
+| salaire |
++---------+
+|    5000 |
+|    2300 |
+|    3550 |
+|    1900 |
+|    1600 |
+|    3100 |
+|    4500 |
+|    2700 |
+|    1390 |
+|    2000 |
+|    1500 |
+|    2250 |
+|    1700 |
+|    3200 |
+|    2550 |
+|    1800 |
+|    1775 |
++---------+
+17 rows in set (0.001 sec)
+
+MariaDB [entreprise]> SELECT 2000-01-15 FROM employes;
++------------+
+| 2000-01-15 |
++------------+
+|       1984 |
+|       1984 |
+|       1984 |
+|       1984 |
+|       1984 |
+|       1984 |
+|       1984 |
+|       1984 |
+|       1984 |
+|       1984 |
+|       1984 |
+|       1984 |
+|       1984 |
+|       1984 |
+|       1984 |
+|       1984 |
+|       1984 |
+|       1984 |
+|       1984 |
+|       1984 |
++------------+
+20 rows in set (0.001 sec)
+
+MariaDB [entreprise]> SELECT prenom, nom FROM employes WHERE salaire=2000;
++---------+--------+
+| prenom  | nom    |
++---------+--------+
+| Mathieu | Vignal |
++---------+--------+
+1 row in set (0.001 sec)
+
+MariaDB [entreprise]> SELECT prenom, nom FROM employes WHERE salaire >=2000;
++-------------+----------+
+| prenom      | nom      |
++-------------+----------+
+| Jean-pierre | Laborde  |
+| Clement     | Gallet   |
+| Thomas      | Winter   |
+| Melanie     | Collier  |
+| Laura       | Blanchet |
+| Celine      | Perrin   |
+| Mathieu     | Vignal   |
+| Damien      | Durand   |
+| Nathalie    | Martin   |
+| Benoit      | Lagarde  |
++-------------+----------+
+10 rows in set (0.001 sec)
+
+MariaDB [entreprise]> SELECT prenom, nom FROM employes WHERE salaire BETWEEN 2000 AND 3200;
++----------+---------+
+| prenom   | nom     |
++----------+---------+
+| Clement  | Gallet  |
+| Melanie  | Collier |
+| Celine   | Perrin  |
+| Mathieu  | Vignal  |
+| Damien   | Durand  |
+| Nathalie | Martin  |
+| Benoit   | Lagarde |
++----------+---------+
+7 rows in set (0.001 sec)
+
+MariaDB [entreprise]> SELECT prenom, nom FROM employes WHERE genre = "m";
++-------------+---------+
+| prenom      | nom     |
++-------------+---------+
+| Jean-pierre | Laborde |
+| Clement     | Gallet  |
+| Thomas      | Winter  |
+| Fabrice     | Grand   |
+| Guillaume   | Miller  |
+| Julien      | Cottet  |
+| Mathieu     | Vignal  |
+| Thierry     | Desprez |
+| Damien      | Durand  |
+| Daniel      | Chevel  |
+| Benoit      | Lagarde |
++-------------+---------+
+11 rows in set (0.001 sec)
+
+MariaDB [entreprise]> SELECT prenom, nom FROM employes WHERE date_embauche BETWEEN 2000-01-15 AND 2011-09-28;
+Empty set, 2 warnings (0.009 sec)
+
+MariaDB [entreprise]> SELECT prenom, nom FROM employes WHERE date_embauche BETWEEN 2000-01-15 AND 2010-10-23;
+Empty set, 2 warnings (0.001 sec)
+
+MariaDB [entreprise]> SELECT prenom, nom FROM employes WHERE date_embauche BETWEEN 2000-01-15 AND CURDATE;
+ERROR 1054 (42S22): Unknown column 'CURDATE' in 'where clause'
+MariaDB [entreprise]> SELECT prenom, nom FROM employes WHERE date_embauche BETWEEN 2000-01-15 AND CURDATE();
++-------------+----------+
+| prenom      | nom      |
++-------------+----------+
+| Jean-pierre | Laborde  |
+| Clement     | Gallet   |
+| Thomas      | Winter   |
+| Chloe       | Dubar    |
+| Elodie      | Fellier  |
+| Fabrice     | Grand    |
+| Melanie     | Collier  |
+| Laura       | Blanchet |
+| Guillaume   | Miller   |
+| Celine      | Perrin   |
+| Julien      | Cottet   |
+| Mathieu     | Vignal   |
+| Thierry     | Desprez  |
+| Amandine    | Thoyer   |
+| Damien      | Durand   |
+| Daniel      | Chevel   |
+| Nathalie    | Martin   |
+| Benoit      | Lagarde  |
+| Emilie      | Sennard  |
+| Stephanie   | Lafaye   |
++-------------+----------+
+20 rows in set, 1 warning (0.001 sec)
+
+MariaDB [entreprise]> SELECT CURRENT_DATE;
++--------------+
+| CURRENT_DATE |
++--------------+
+| 2023-01-17   |
++--------------+
+1 row in set (0.000 sec)
+
+MariaDB [entreprise]> SELECT DISTINCT prenom, nom FROM 'employes' WHERE 'service'='comptabilité' AND 'service'=informatique';
+    '> SELECT prenom, nom FROM 'employes' WHERE 'service'='comptabilité' AND 'service'=informatique';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ''employes' WHERE 'service'='comptabilité' AND 'service'=informatique';
+SELEC...' at line 1
+MariaDB [entreprise]> SELECT prenom, nom, service FROM employes WHERE `service` = "informatique" OR `service` = "comptabilite";
+ prenom 	nom 	service 	
+Fabrice 	Grand 	comptabilite
+Mathieu 	Vignal 	informatique
+Damien 		Durand 	informatique
+Daniel 		Chevel 	informatique
+
+C:\Users\utilisateur>use entreprise;
+'use' n’est pas reconnu en tant que commande interne
+ou externe, un programme exécutable ou un fichier de commandes.
+
+
+C:\Users\utilisateur>mysql -u root -p
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 215
+Server version: 10.4.24-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| entreprise         |
+| information_schema |
+| montagnes          |
+| multiculturel      |
+| mysql              |
+| performance_schema |
+| phpmyadmin         |
+| test               |
++--------------------+
+8 rows in set (0.002 sec)
+
+MariaDB [(none)]> use entreprise;
+Database changed
+
+
+MariaDB [entreprise]> SELECT prenom, nom FROM employes WHERE service ='comptabilite' OR service ='informatique';
++---------+--------+
+| prenom  | nom    |
++---------+--------+
+| Fabrice | Grand  |
+| Mathieu | Vignal |
+| Damien  | Durand |
+| Daniel  | Chevel |
++---------+--------+
+4 rows in set (0.001 sec)
+
+MariaDB [entreprise]> SELECT service, COUNT(*) AS nombre_employes FROM employes;
++-----------+-----------------+
+| service   | nombre_employes |
++-----------+-----------------+
+| direction |              20 |
++-----------+-----------------+
+1 row in set (0.001 sec)
+
+MariaDB [entreprise]> SELECT prenom, nom FROM employes WHERE prenom LIKE 'd%';
++--------+--------+
+| prenom | nom    |
++--------+--------+
+| Damien | Durand |
+| Daniel | Chevel |
++--------+--------+
+2 rows in set (0.001 sec)
+
+MariaDB [entreprise]> SELECT service, COUNT(*) AS nombre_employes FROM employes GROUP BY service HAVING COUNT (*) > 5 ;
+service 	nombre_employes 	
+commercial 	6

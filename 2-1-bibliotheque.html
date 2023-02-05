@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS v5.2.1 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+
+    <title>Cours SQL - Pratique</title>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="01-cours.html">Cours SQL</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="1-1-employes.html">1.1 - Employés</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="1-2-employes.html">1.2 - Employés</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="2-1-bibliotheque.html">2.1 - Bibliotheque</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="2-2-bibliotheque.html">2.2 - Bibliotheque</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="3-1-immobilier.html">3.1 - Immobilier</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="3-2-immobilier.html">3.2 - Immobilier</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav><!-- fin de la nav -->
+
+    <!-- jumbotron-fluid -->
+    <header class="p-5 mb-4 bg-light rounded-3">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold">Pratique MySQL</h1>
+            <p class="col-md-8 fs-4">Une nouvelle BDD : biliotheque</p>
+        </div>
+    </header><!-- fin du header -->
+
+    <main class="container">
+
+        <div class="row m-2">
+            <div class="col-12">
+                <h2 class="text-center">Les requêtes imbriquées MySQL</h2>
+            </div>
+        </div> <!-- fin de la première row -->
+
+        <div class="row m-2 border p-2">
+            <div class="col-12">
+                <h2 class="text-center" id="insertInto">1 - Création de la BDD bibliotheque</h2>
+            </div>
+            <div class="col-12 col-md-4">
+                <h3 class="text-center">a) La modélisation</h3>
+                <p>Afin de créer une BDD sur la bibliothèque on a besoin des tables suivants : </p>
+                <ul>
+                    <li>Abonne
+                        <ul>
+                            <li>id_abonne</li>
+                            <li>prenom</li>
+                        </ul>
+                    </li>
+                    <li>Livres
+                        <ul>
+                            <li>id_livre</li>
+                            <li>auteur</li>
+                            <li>titre</li>
+                        </ul>
+                    </li>
+                    <li>Emprunts
+                        <ul>
+                            <li>id_emprunt</li>
+                            <li>id_livre</li>
+                            <li>id_abonne</li>
+                            <li>date_sortie</li>
+                            <li>date_rendu</li>
+                        </ul>
+                    </li>
+                </ul>
+                <p class="alert alert-danger">Ici, on commence à modéliser notre base de données en réfléchissant à ce
+                    qui va aller dedans. </p>
+            </div>
+            <div class="col-12 col-md-8">
+                <figure>
+                    <img src="img/abonne.png" alt="" class="img-fluid">
+                </figure>
+                <figure>
+                    <img src="img/livre.png" alt="" class="img-fluid">
+                </figure>
+            </div>
+            <div class="col-12 col-md-6">
+                <figure class="text-center mx-auto">
+                    <img src="img/emprunt.png" alt="" class="img-fluid">
+                </figure>
+            </div>
+            <div class="col-12 col-md-6">
+                <figure class="text-center mx-auto">
+                    <img src="img/designer.png" alt="" class="img-fluid">
+                </figure>
+            </div>
+            <div class="col-12 col-md-6">
+                <h3 class="text-center">b) Les codes nécessaires pour la création des différentes parties</h3>
+                <p>On écrit la requête suivante sur le terminal :
+                    <code>CREATE DATABASE bibliotheque CHARACTER SET 'utf8';</code>
+                </p>
+                <p>Création de la première table, celle des abonnés : <br><code>
+                    CREATE TABLE IF NOT EXISTS abonne ( <br>
+                    id_abonne INT(3) NOT NULL AUTO_INCREMENT, <br>
+                    prenom VARCHAR(20) NOT NULL, <br>
+                    PRIMARY KEY (id_abonne) <br>
+                    )ENGINE=innoDB;</code></p>
+                <p>Création de la deuxième table, celle des livres : <br><code>
+                    CREATE TABLE IF NOT EXISTS livre ( <br>
+                    id_livre INT(3) NOT NULL AUTO_INCREMENT, <br>
+                    auteur VARCHAR(30) NOT NULL, <br>
+                    titre VARCHAR(30) NOT NULL, <br>
+                    PRIMARY KEY (id_livre) <br>
+                    )ENGINE=innoDB;</code></p>
+                <p>Création de la dernière table, celle des emprunts : <br><code>
+                    CREATE TABLE IF NOT EXISTS emprunt (
+                    id_emprunt INT(3) NOT NULL AUTO_INCREMENT, 
+                    id_livre INT(3) DEFAULT NULL, 
+                    id_abonne INT(3) DEFAULT NULL, 
+                    date_sortie DATE NOT NULL, 
+                    date_rendu DATE DEFAULT NULL, 
+                    PRIMARY KEY (id_emprunt) 
+                    )ENGINE=innoDB;</code></p>
+                <p>Création des clefs étrangères <br>
+                    <code>ALTER TABLE emprunt ADD FOREIGN KEY (id_livre) REFERENCES bibliotheque.livre(id_livre); <br>
+                ALTER TABLE emprunt ADD FOREIGN KEY (id_abonne) REFERENCES bibliotheque.abonne (id_abonne);</code>
+                </p>
+                <p>Pour vérifier la construction de nos tables, on utilise <code>DESCRIBE nom_table;</code></p>
+            </div>
+            <div class="col-12 col-md-6">
+                <h3 class="text-center">b) Entrer des données dans les tables</h3>
+                <p><code>INSERT INTO abonne VALUES <br>
+                    (NULL, 'Guillaume'), <br>
+                    (NULL, 'Benoit'), <br>
+                    (NULL, 'Chloe'), <br>
+                    (NULL, 'Laura');</code></p>
+                <p><code>INSERT INTO livre (id_livre, auteur, titre) VALUES <br>
+                    (100, 'GUY DE MAUPASSANT', 'Une vie'), <br>
+                    (101, 'GUY DE MAUPASSANT', 'Bel-Ami '), <br>
+                    (102, 'HONORE DE BALZAC', 'Le père Goriot'), <br>
+                    (103, 'ALPHONSE DAUDET', 'Le Petit chose'), <br>
+                    (104, 'ALEXANDRE DUMAS', 'La Reine Margot'), <br>
+                    (105, 'ALEXANDRE DUMAS', 'Les Trois Mousquetaires'); </code></p>
+                <p><code>INSERT INTO emprunt (id_emprunt, id_livre, id_abonne, date_sortie, date_rendu) VALUES <br>
+                    (1, 100, 1, '2014-12-17', '2014-12-18'), <br>
+                    (2, 101, 2, '2014-12-18', '2014-12-20'), <br>
+                    (3, 100, 3, '2014-12-19', '2014-12-22'), <br>
+                    (4, 103, 4, '2014-12-19', '2014-12-22'), <br>
+                    (5, 104, 1, '2014-12-19', '2014-12-28'), <br>
+                    (6, 105, 2, '2015-03-20', '2015-03-26'), <br>
+                    (7, 105, 3, '2015-06-13', NULL), <br>
+                    (8, 100, 2, '2015-06-15', NULL);</code></p>
+            </div>
+        </div><!-- fin de la rangée -->
+
+        <div class="row m-2 border p-2">
+            <div class="col-12">
+                <h2 class="text-center" id="select">2 - SELECT sur plusieurs tables</h2>
+                <ul>
+                    <li><code>SELECT * FROM abonne;</code></li>
+                    <li><code>SELECT * FROM livre;</code></li>
+                    <li><code>SELECT * FROM emprunt;</code></li>
+                </ul>
+                <ul>
+                    <li>On cherche les livres qui n'ont pas encore été rendu :
+                        <code>SELECT id_livre FROM emprunt WHERE date_rendu IS NULL;</code>
+                    </li>
+                    <li class="alert alert-danger">Pour trouver quelque chose qui est NULL on utilisera le terme IS !
+                    </li>
+                    <li>On cherche les titres des livres qui n'ont pas été rendu :
+                        <code>SELECT titre FROM livre WHERE id_livre IN (SELECT id_livre FROM emprunt WHERE date_rendu IS NULL);</code>
+                        le champ id_livre est utilisé pour relier le sinfos de la table livre et de la table emprunt.
+                    </li>
+                    <li class="alert alert-danger">On utilise le mot clé IN et non pas le signe (=) car plusieurs résultats seront renvoyés par la requête. </li>
+                </ul>
+                <ul>
+                    <li>On cherche maintenant l'id de livre que Chloe a emprunté : 
+                        <code>SELECT id_livre FROM emprunt WHERE id_abonne IN(SELECT id_abonne FROM abonne WHERE prenom='chloe');</code>
+                    </li>
+                    <li>On cherche maintenant le prénom des abonnés ayant emprunté un livre le 2014-12-19 :
+                        <code> SELECT prenom FROM abonne WHERE id_abonne IN (SELECT id_abonne FROM emprunt WHERE date_sortie = "2014-12-19");</code>
+                    </li>
+                    <li>Afficher la liste des abonnés ayant emprunté un livre de Daudet :
+                        <code> SELECT * FROM abonne WHERE id_abonne IN (SELECT id_abonne FROM emprunt WHERE id_livre IN (SELECT id_livre FROM livre WHERE auteur='Alphonse Daudet'));</code>
+                    </li>
+                    <li>Afficher les titres de livre que Chloe a emprunté à la bibliothèque :
+                        <code>SELECT titre FROM livre WHERE id_livre IN (SELECT id_livre FROM emprunt WHERE id_abonne IN (SELECT id_abonne FROM abonne WHERE prenom='chloe'));</code>
+                    </li>
+                    <li>Afficher les titres des livres que Chloe n'a pas emprunté :
+                        <code>SELECT titre FROM livre WHERE id_livre NOT IN (SELECT id_livre FROM emprunt WHERE id_abonne IN (SELECT id_abonne FROM abonne WHERE prenom='chloe'));</code>
+                    </li>
+                    <li>Afficher les titres des livres que Chloé n'a pas encore rendu à la bibliothèque :
+                        <code>SELECT titre FROM livre WHERE id_livre IN (SELECT id_livre FROM emprunt WHERE date_rendu IS NULL AND id_abonne IN (SELECT id_abonne FROM abonne WHERE prenom='chloe'));</code>
+                    </li>
+                    <li>Combien de livres Guillaume a emprunté à la bibliothèque ? :
+                        <code>SELECT COUNT(*) FROM emprunt WHERE id_abonne IN (SELECT id_abonne FROM abonne WHERE prenom="Guillaume");</code>
+                    </li>
+                    <li>Quel est le livre qui n'a été emprunté par personne ?
+                        <code>SELECT titre FROM livre WHERE id_livre NOT IN (SELECT id_livre FROM emprunt);</code>
+                    </li>
+                    <li>Combien de personnes ont emprunté Une vie ?
+                        <code>SELECT COUNT(*) FROM emprunt WHERE id_livre IN (SELECT id_livre FROM livre WHERE titre ='Une vie');</code>
+                    </li>
+                    <li>Quel livre a été emprunté le dernier ?
+                        <code>SELECT titre FROM livre WHERE id_livre IN (SELECT id_livre FROM emprunt ORDER BY date_sortie DESC) LIMIT 1;</code>
+                    </li>
+                    <li>afficher les personnes qui ont emprunté le moins de livre
+                        <code>SELECT abonne.prenom FROM abonne, emprunt WHERE abonne.id_abonne = emprunt.id_abonne GROUP BY emprunt.id_abonne ORDER BY COUNT(*) ASC LIMIT 1;</code>
+                    </li>
+                    <li>Qui est la première personne qui a emprunté le livre Bel-Ami ?
+                        <code>SELECT prenom FROM abonne WHERE id_abonne IN(SELECT id_abonne FROM emprunt WHERE id_livre IN(SELECT id_livre FROM livre WHERE titre='Bel-Ami')) LIMIT 0,1</code>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </main>
+
+
+    <!-- Bootstrap JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
+        </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
+        integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
+        </script>
+</body>
+
+</html>

@@ -1,0 +1,268 @@
+Afficher la profession de l'employé 547
+SELECT service FROM `employes` WHERE id_employes = 547;
+
+
+Afficher la date d'embauche d'Amandine
+SELECT date_embauche FROM `employes` WHERE prenom = "amandine";
+
+
+Afficher le nombre de commerciaux
+SELECT COUNT(*) AS "nombre_de_commerciaux" FROM `employes` WHERE `service` = "commercial";
+
+
+Afficher le coût des commerciaux sur une année
+SELECT SUM(`salaire`*12) AS "salaire_annuel_commercial" FROM `employes` WHERE `service` = "commercial" ;
+
+
+Afficher le salaire moyen par service
+SELECT ROUND(AVG(salaire),2) AS "salaire_moyen_par_service" FROM `employes` GROUP BY `service` ;
+
+
+Afficher le nombre de recrutement sur l'année 2010
+SELECT COUNT(*) `prenom`, `nom`, `date_embauche` AS "recrutement 2010" FROM `employes` WHERE date_embauche BETWEEN "2010-01-01" AND "2010-12-31" GROUP BY `date_embauche`;
+
+
+Ajouter 100€ a chaque salaire de la liste
+UPDATE `employes` SET salaire = salaire + 100;
+
+
+Supprimer un élément de la liste (souvent par ID)
+DELETE FROM `employes` WHERE `id_employes` = 350;
+
+
+Afficher le nombre de services
+SELECT COUNT(DISTINCT service) As "nombre_de_services" FROM `employes`;
+
+
+Afficher les infos du commercial qui a le plus gros salaire
+SELECT * FROM `employes` WHERE salaire = (SELECT MAX(`salaire`) FROM employes WHERE service = "commercial");
+Mieux vaut utiliser "HAVING"
+SELECT * FROM `employes` HAVING salaire = (SELECT MAX(`salaire`) FROM employes WHERE service = "commercial");
+
+
+Afficher l'employé ayant été embauché en dernier.
+SELECT * FROM `employes` HAVING date_embauche = (SELECT MAX(date_embauche) FROM `employes`);
+
+
+Supprimer le directeur de la liste, (requete par id)
+DELETE FROM `employes` WHERE `id_employes` = 350;
+
+supprimer tous les employés dont le prenom commence par Jean;
+DELETE FROM `employes` WHERE prenom LIKE "Jean%";
+
+
+Relation entre les bases de données:
+CREATE TABLE IF NOT EXISTS `Abonnes` ( id_Abonne int(3) NOT NULL AUTO_INCREMENT, prenom varchar(20) DEFAULT NULL, PRIMARY KEY (id_Abonne) )ENGINE=InnoDB DEFAULT CHARSET=latin1; 
+CREATE TABLE IF NOT EXISTS `livres`(id_livre int(3) NOT NULL AUTO_INCREMENT, Auteur varchar (20) DEFAULT NULL, Titre varchar (20) DEFAULT NULL, PRIMARY KEY (id_livre) ) ENGINE=InnoDB DEFAULT CHARSET=latin1; 
+CREATE TABLE IF NOT EXISTS emprunt ( id_emprunt INT(3) NOT NULL AUTO_INCREMENT, id_livre INT(3) DEFAULT NULL, id_abonne INT(3) DEFAULT NULL, date_sortie DATE NOT NULL, date_rendu DATE DEFAULT NULL, PRIMARY KEY (id_emprunt) )ENGINE=innoDB; 
+
+INSERT INTO `livres` VALUES(100, "GUY DE MAUPASSANT", "Une vie"),(101, "GUY DE MAUPASSANT", "Bel ami"), (102, "HONORE DE BALZAC", "Le père Goriot"), (103, "ALPHONSE DAUDET", "Le petit chose"),(104, "ALEXANDRE DUMAS", "La Reine Margot"),(105, "ALEXANDRE DUMAS", "Les Trois Mousquetaires");
+INSERT INTO `abonnes` VALUES(1, "Guillaume"), (2, "Benoît"), (3, "Chloé"), (4, "Laura"), (5, "Alex");
+
+Une base de donnée sert de relation entre Abonnes et Livres, la table emprunt
+ALTER TABLE emprunt ADD FOREIGN KEY (id_Abonne) REFERENCES bibliothèque.Abonnes (id_Abonne);
+
+
+Afficher les livres non rendus (utiliser la table emprunt):
+SELECT id_livre FROM `emprunt` WHERE date_rendu IS NULL;
+
+
+Afficher les titres des livres qui n'ont pas été rendu
+On utilise le mot clé IN et non pas le signe (=) car plusieurs résultats seront renvoyés par la requête.
+SELECT Titre FROM `livres` WHERE id_livre IN (SELECT id_livre FROM `emprunt` WHERE date_rendu IS NULL); 
+
+
+Afficher l'id du livre que Chloé a emprunté:
+SELECT id_livre FROM `emprunt` WHERE id_abonne IN (SELECT id_abonne FROM abonnes WHERE prenom = "Chloé");
+
+
+Afficher les prenoms des abonnés ayant emprunte un livre le 2014-12-19:
+SELECT prenom FROM `abonnes` WHERE id_abonne IN (SELECT id_abonne FROM emprunt WHERE date_sortie = "2014-12-19"); 
+On peut également écrire :
+SELECT prenom
+FROM abonne, emprunt
+WHERE abonne.id_abonne=emprunt.id_abonne AND emprunt.date_sortie='2014-12-19';
+
+
+Afficher la liste des abonnés ayant emprunté un livre de Daudet:
+SELECT prenom FROM `abonnes` WHERE id_Abonne IN (SELECT id_abonne FROM emprunt WHERE id_livre IN (SELECT id_livre FROM livres WHERE Auteur = "ALPHONSE DAUDET")); 
+
+
+Afficher les titres de livre que Chloe a emprunté à la bibliothèque :
+SELECT Titre FROM `livres` WHERE id_livre IN (SELECT id_livre FROM emprunt WHERE id_Abonne IN (SELECT id_abonne FROM abonnes WHERE prenom = "Chloé")); 
+
+
+Afficher les titres des livres que Chloe n'a pas emprunté ???
+SELECT Titre FROM `livres` WHERE id_livre NOT IN (SELECT id_livre FROM emprunt WHERE id_Abonne IN (SELECT id_abonne FROM abonnes WHERE prenom = "Chloé")); 
+
+
+Afficher les titres des livres que Chloé n'a pas encore rendu à la bibliothèque ???
+SELECT Titre FROM `livres` WHERE id_livre IN (SELECT id_livre FROM emprunt WHERE date_rendu IS NULL AND id_abonne IN (SELECT id_abonne FROM abonnes WHERE prenom = "Chloé")); 
+
+On peut également écrire :
+
+SELECT titre
+FROM livre
+WHERE id_livre IN (SELECT id_livre
+                  FROM emprunt
+                  WHERE date_rendu IS NULL AND id_abonne IN (SELECT id_abonne
+                                              FROM abonne
+                                              WHERE prenom='chloe')
+		  );
+
+
+Combien de livres Guillaume a emprunté à la bibliothèque ?
+SELECT COUNT(*) 
+FROM livres 
+WHERE id_livre IN (SELECT id_livre 
+                   FROM emprunt 
+                   WHERE id_abonne IN (SELECT id_abonne 
+                                       FROM abonnes 
+                                       WHERE prenom ="guillaume") 
+		  ); 
+
+
+Quel est le livre qui n'a été emprunté par personne ?
+SELECT titre FROM livres WHERE id_livre NOT IN (SELECT id_livre FROM emprunt); 
+
+Combien de personnes ont emprunté Une vie ?
+SELECT COUNT(*) As nombre_personne
+FROM emprunt
+WHERE id_livre IN (SELECT id_livre
+		  FROM livres
+		  WHERE titre = "Une vie");
+
+
+
+Quel livre a été emprunté le dernier ?
+SELECT Titre AS "dernier livre emprunté" FROM livres WHERE id_livre IN (SELECT id_livre FROM emprunt WHERE date_sortie IN(SELECT MAX(date_sortie) FROM emprunt));
+On peut aussi écrire :
+SELECT titre 
+FROM livres
+WHERE id_livre IN(SELECT id_livre 
+                  FROM emprunt
+                  ORDER BY date_sortie DESC) LIMIT 1;
+
+
+Afficher les personnes qui ont emprunté le moins de livre ?
+
+SELECT abonne.prenom, abonne.id_abonne, emprunt.id_abonne
+FROM abonne, emprunt
+WHERE abonne.id_abonne = emprunt.id_abonne
+GROUP BY emprunt.id_abonne
+ORDER BY COUNT(*) LIMIT 1;
+
+OU
+
+SELECT a.prenom, a.id_abonne, e.id_abonne
+FROM abonne a, emprunt e
+WHERE a.id_abonne = e.id_abonne
+GROUP BY e.id_abonne
+ORDER BY COUNT(*) LIMIT 1;
+
+
+Afficher les dates auxquelles Guillaume s'est rendu à la bibliothèque pour emprunter ou pour rendre un livre
+SELECT date_sortie, date_rendu
+FROM emprunt 
+WHERE id_abonne IN(SELECT id_abonne 
+                    FROM abonnes 
+                    WHERE prenom ="guillaume"); 
+
+
+Si l'on veut aussi afficher le prenom cela n'est plus possible avec une requête "imbriquée" on doit utiliser une jointure entre les tables :
+SELECT abonne.prenom, emprunt.date_sortie, emprunt.date_rendu
+FROM abonne, emprunt
+WHERE abonne.id_abonne=emprunt.id_abonne 
+AND abonne.prenom='guillaume';
+
+ou:
+
+SELECT abonne.prenom, date_sortie, date_rendu 
+FROM emprunt
+INNER JOIN abonne
+ON emprunt.id_abonne = abonne.id_abonne
+WHERE abonne.prenom='Guillaume';
+
+
+
+Afficher les dates auxquelles les livres écrits par Alphonse Daudet ont été empruntés ou rendus à la bibliothèque.
+SELECT date_sortie, date_rendu
+FROM emprunt
+WHERE id_livre IN(SELECT id_livre 
+                  FROM livres
+                  WHERE auteur='alphonse daudet');
+Ou si l'on doit rajouter une colonne avec l'auteur on crée une jointure :
+SELECT livres.Auteur, emprunt.date_rendu, emprunt.date_sortie 
+FROM livres, emprunt 
+WHERE livres.id_livre = emprunt.id_livre 
+AND livres.Auteur = "alphonse daudet"; 
+Il ne faut pas oublier de formuler que les clés primaires doivent être égales au clés étrangères.
+
+
+Qui a emprunté le livre 'Une Vie' sur l'année 2014 ?
+SELECT prenom 
+FROM abonnes 
+WHERE id_abonne IN (SELECT id_abonne 
+		FROM `emprunt` 
+		WHERE id_livre IN (SELECT id_livre 
+				FROM livres 
+				WHERE titre = "Une vie") 
+		AND date_sortie LIKE "2014%"); 
+
+
+On peut aussi écrire :
+
+SELECT abonnes.prenom, livres.Titre, emprunt.date_sortie
+FROM abonnes, livres, emprunt
+WHERE livres.id_livre = emprunt.id_livre
+AND abonnes.id_abonne = emprunt.id_abonne
+AND emprunt.date_sortie LIKE "2014%"
+AND livres.Titre = "une vie";
+
+
+Afficher le nombre de livres empruntés par chaque abonné :
+
+SELECT a.prenom, COUNT(e.id_livre) AS nombre_de_livres_empruntes 
+FROM abonne a, emprunt e  
+WHERE a.id_abonne=e.id_abonne 
+GROUP BY e.id_abonne;
+
+/*non simplifié: */
+SELECT abonne.prenom, COUNT(emprunt.id_livre) AS nombre_de_livres_empruntes
+FROM abonne, emprunt  
+WHERE abonne.id_abonne=emprunt.id_abonne 
+GROUP BY emprunt.id_abonne;
+
+
+Qui a emprunté Quoi ? et Quand ?
+
+SELECT abonnes.prenom, livres.Titre, emprunt.date_sortie
+FROM abonnes, emprunt, livres
+WHERE abonnes.id_abonne = emprunt.id_abonne
+AND emprunt.id_livre = livres.id_livre;
+
+
+Afficher le prénom des abonnés avec le numéro des livres qu'ils ont emprunté :
+
+SELECT abonnes.prenom, livres.id_livre
+FROM abonnes, emprunt, livres
+WHERE abonnes.id_abonne = emprunt.id_abonne
+AND emprunt.id_livre = livres.id_livre;
+
+Afficher le prénom des abonnés avec le numéro des livres qu'ils ont emprunté grâce à left join :
+
+SELECT prenom, id_livre
+FROM abonne
+LEFT JOIN emprunt
+ON abonne.id_abonne=emprunt.id_abonne
+
+Quels sont les logements gérés par l'agence « laforet »
+
+SELECT agence.id_agence, logement_agence.id_logement, agence.adresse, agence.nom
+					FROM logement_agence
+                    RIGHT JOIN agence 
+                    ON logement_agence.id_agence = agence.id_agence
+					WHERE logement_agence.id_agence IN(
+    									SELECT id_agence
+										FROM `agence` 
+										WHERE nom = "laforet");

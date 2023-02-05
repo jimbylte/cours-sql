@@ -1,0 +1,180 @@
+    Afficher le nom des agences
+SELECT `nom` AS "nom des agences" FROM `agence`; 
+
+    Afficher les informations de l'agence 'Orpi'
+SELECT * FROM `agence` WHERE nom = "orpi"; 
+
+    Afficher le 1er enregistrement de la table logement
+SELECT * FROM `logement` ORDER BY id_logement LIMIT 1; 
+
+    Afficher le nombre total de logement (alias : nombre de logements)
+SELECT COUNT(id_logement) 
+AS "nombre_de_logements"
+FROM `logement`;
+
+    Afficher les logements à VENDRE à moins de 150 000 € dans l'ordre croissant des prix
+SELECT genre, prix FROM `logement` WHERE categorie = "vente" AND prix <150000 ORDER BY prix ASC; 
+
+    Afficher le nombre de logements à la location (alias : logements à louer)
+SELECT COUNT(categorie) 
+AS "logements à louer" 
+FROM `logement` 
+WHERE categorie = "location"; 
+
+    Afficher les villes recherchées par les personnes qui demandent un logement
+SELECT ville FROM `demande`;
+
+    Afficher le nombre des biens à vendre par ville
+SELECT COUNT(categorie) 
+AS "logements à vendre" , ville 
+FROM `logement` 
+WHERE categorie = "vente" 
+GROUP BY ville; 
+
+    Quels sont les id des logements destinés à la location ? 
+SELECT id_logement 
+AS "ID_des_logements_destinés_à_la_location"
+FROM `logement` 
+WHERE categorie = "location";
+
+    Quel sont les identifiants des logements compris entre 20m² et 30m² ?
+SELECT id_logement, superficie
+FROM `logement` 
+WHERE superficie BETWEEN 20 AND 30;
+
+    Quel est le prix du logement le moins cher à vendre ?
+SELECT MIN(prix)
+FROM `logement`
+WHERE categorie = "vente";
+
+    Dans quelles villes se trouvent les maisons à vendre ?
+SELECT DISTINCT ville FROM `logement` WHERE categorie = "vente"; 
+
+
+    L'agence Orpi souhaite passer les frais d'agence qu'elle applique le logement ayant l'id '5246'. Passez les frais de CE logement de 800 à 730€.
+UPDATE  logement_agence
+SET frais = REPLACE(frais, '800', '730')
+WHERE logement_agence.id_logement = 5246;
+
+On peut egalment ecrire 
+UPDATE logement_agence SET frais= '800' 
+WHERE id_logement=5246
+AND logement_agence.id_agence = (SELECT agence.id_agence
+                                 FROM agence
+                                 WHERE nom ='orpi');
+
+
+
+    Quels sont les logements gérés par l'agence « laforet »
+SELECT agence.id_agence, logement_agence.id_logement, agence.adresse, agence.nom
+		FROM logement_agence
+                RIGHT JOIN agence 
+                ON logement_agence.id_agence = agence.id_agence
+		WHERE logement_agence.id_agence IN(SELECT id_agence
+						   FROM `agence` 
+		     				WHERE nom = "laforet");
+On peut aussi ecrire 
+
+SELECT id_logement 
+FROM logement_agence
+WHERE id_agence IN(SELECT id_agence
+                 FROM agence
+                 WHERE nom='laforet');
+
+
+
+    Affichez le nombre de propriétaires dans la ville de Paris (Alias : Nombre propriétaire parisien)
+SELECT COUNT(id_personne)
+AS "nombre de parisiens"
+FROM `demande`
+WHERE ville = "paris";
+
+    Afficher les infos des trois premières personnes souhaitant acheter un logement
+SELECT prenom, personne.id_personne, demande.id_demande, demande.categorie 
+FROM `demande` 
+LEFT JOIN personne 
+ON personne.id_personne = demande.id_personne 
+WHERE categorie = "vente" 
+ORDER BY id_demande LIMIT 3; 
+
+ou on peut ecrire 
+SELECT p.id_personne, p.prenom, d.categorie, d.id_demande FROM `demande` d, `personne` p WHERE p.id_personne = d.id_personne AND d.categorie = 'vente' LIMIT 3; 
+
+
+    Affichez le prénom du vendeur pour le logement ayant la référence « 5770 »
+SELECT prenom FROM personne WHERE id_personne IN(SELECT id_personne FROM logement_personne WHERE id_logement = 5770); 
+ou
+SELECT id_personne, prenom, id_logement FROM personne, logement WHERE id_personne IN(SELECT id_personne FROM logement_personne WHERE id_logement = 5770) AND id_logement = 5770; 
+
+On peut aussi ecrire 
+SELECT p.id_personne, p.prenom, l.id_logement FROM `personne` p, `logement` l, `logement_personne` lp WHERE l.id_logement = 5770 AND l.id_logement = lp.id_logement AND lp.id_personne = p.id_personne; 
+
+
+    Affichez les prénoms des personnes souhaitant accéder à un logement sur la ville de Lyon
+SELECT prenom
+FROM personne
+WHERE id_personne IN(SELECT id_personne
+ 					FROM logement_personne
+ 					WHERE id_logement IN(SELECT id_logement
+                      					FROM logement
+                      					WHERE ville = 'lyon'));
+
+    Affichez les prénoms des personnes souhaitant accéder à un logement en location sur la ville de Paris
+SELECT prenom
+FROM personne
+WHERE id_personne IN(SELECT id_personne
+ 					FROM logement_personne
+ 					WHERE id_logement IN(SELECT id_logement
+                      					FROM logement
+                      					WHERE ville = 'paris' AND categorie = 'location'));
+
+    Affichez les prénoms des personnes souhaitant acheter un logement de la plus grande à la plus petite superficie
+SELECT personne.prenom
+FROM personne
+WHERE personne.id_personne IN(SELECT logement_personne.id_personne
+ 					FROM logement_personne
+                     LEFT JOIN logement 
+                     ON logement_personne.id_logement = logement.id_logement
+                     ORDER BY superficie ASC);
+
+    Quel sont les prix finaux proposés par les agences pour la maison à la vente ayant la référence « 5091 » ? (Alias : prix frais d'agence inclus)
+SELECT SUM(prix + frais) FROM `logement`, `logement_agence` WHERE logement.id_logement = 5091 AND logement_agence.id_logement = 5091;
+
+
+    Indiquez le prix total (prix et frais d'agence) pour le logement ayant la référence « 5873 »
+SELECT SUM(prix + frais) FROM `logement`, `logement_agence` WHERE logement.id_logement = 5873 AND logement_agence.id_logement = 5873;
+
+
+    Si l'ensemble des logements étaient vendus ou loués demain, quel serait le bénéfice généré grâce aux frais d'agence et pour chaque agence (Alias : benefice, classement : par ordre croissant des gains)
+ 
+SELECT frais AS "benefice", nom 
+FROM `agence`,`logement_agence` 
+WHERE agence.id_agence = logement_agence.id_agence 
+GROUP BY nom 
+ORDER BY frais;
+
+
+    Affichez les id des biens en location, les prix, suivis des frais d'agence (classement : dans l'ordre croissant des prix)
+ SELECT logement.id_logement, prix, frais 
+FROM `logement`, `logement_agence` 
+WHERE categorie = "location" 
+AND logement.id_logement = logement_agence.id_logement 
+ORDER BY prix;
+
+
+    Quel est le prénom du propriétaire proposant le logement le moins cher à louer ?
+SELECT prenom
+FROM personne
+WHERE id_personne = (SELECT id_personne
+                    FROM logement_personne
+                    WHERE id_logement = (SELECT id_logement
+                                        FROM logement
+                                        WHERE categorie = "location"
+                                        ORDER BY prix LIMIT 1));
+
+    Affichez le prénom et la ville où se trouve le logement de chaque propriétaire
+SELECT personne.prenom, logement.ville 
+FROM `personne`, `logement`, `logement_personne` 
+WHERE personne.id_personne = logement_personne.id_personne 
+AND logement_personne.id_logement = logement.id_logement 
+GROUP BY prenom;

@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS v5.2.1 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+
+    <title>Cours SQL - Pratique</title>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="01-cours.html">Cours SQL</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="1-1-employes.html">1.1 - Employés</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="1-2-employes.html">1.2 - Employés</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="2-1-bibliotheque.html">2.1 - Bibliotheque</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="2-2-bibliotheque.html">2.2 - Bibliotheque</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="3-1-immobilier.html">3.1 - Immobilier</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="3-2-immobilier.html">3.2 - Immobilier</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav><!-- fin de la nav -->
+
+    <!-- jumbotron-fluid -->
+    <header class="p-5 mb-4 bg-light rounded-3">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold">Pratique MySQL</h1>
+            <p class="col-md-8 fs-4">Des exos pour s'entraîner</p>
+        </div>
+    </header><!-- fin du header -->
+
+    <main class="container">
+
+        <div class="row m-2 border p-2">
+            <div class="col-12">
+                <h2 class="text-center" id="insertInto">1 - INSERT INTO, requête d'insertion</h2>
+                <ul>
+                    <li>Pour insérer un enregistrement, 1ère méthode :
+                        <code>INSERT INTO employes (prenom, nom, sexe, service, date_embauche, salaire) VALUES ('Alexis', 'Richy', 'm', 'informatique', '2011-12-28', 1800);</code>
+                    </li>
+                    <li>Pour voir l'ID d'Alexis, il y a deux façons :
+                        <code>SELECT * FROM employes WHERE prenom='alexis';</code> ou bien
+                        <code> SELECT * FROM employes ORDER BY id_employes DESC LIMIT 1;</code>
+                    </li>
+                    <li>Pour insérer un enregistrement, 2ème méthode :
+                        <code>INSERT INTO employes VALUES (NULL , 'Jeanne', 'Richy','m','informatique','2012-01-28', 1800)</code>
+                    </li>
+                    <li class="alert alert-danger">NULL nous permet de laisser le champs id_employes se remplir seul car
+                        il est auto-incrémenté. </li>
+                </ul>
+            </div>
+        </div><!-- fin de la rangée -->
+
+        <div class="row m-2 border p-2">
+            <div class="col-12">
+                <h2 class="text-center" id="insert">2 - Requête de modification</h2>
+            </div>
+            <div class="col-12 col-md-6">
+                <h3 class="text-center">a) Maj avec UPDATE</h3>
+                <ul>
+                    <li>Augmenter le salaire d'un employé :
+                        <code>UPDATE employes SET salaire=1871 WHERE id_employes=990;</code>
+                    </li>
+                    <li class="alert alert-danger">On utilise toujours des id pour mettre à jour les informations de la
+                        base de donnée car c'est le seul élément unique. </li>
+                    <li>Pour faire plusieurs mises à jour en même temps il faudra respecter l'ordre des colonnes et les
+                        séparer par une virgule :
+                        <code>UPDATE employes SET service='commercial', salaire=1872 WHERE id_employes=990; </code>//
+                        Ici je modife le service et le salaire de l'employé qui a l'ID 990.
+                    </li>
+                </ul>
+            </div>
+            <div class="col-12 col-md-6">
+                <h3 class="text-center">b) Supprimer avec DELETE</h3>
+                <ul>
+                    <li>Supprimer l'enregistrement d'un employé avec DELETE :
+                        <code>DELETE FROM employes WHERE id_employes=388;</code><br>
+                        Attention, il est très facile de faire une erreur lors d'une suppression ou d'une maj //
+                        vérifiez bien la manipulation en faisant un SELECT * FROM table opur vérifier que vous n'avaez
+                        pas fait une mauvais manipulation.
+                    </li>
+                    <li>Supprimer plusieurs enregistrements avec le code suivant :
+                        <code>DELETE FROM employes WHERE service = 'informatique'; </code>ici on supprime toutes les
+                        personnes du service informatique. // NE PAS LE FAIRE, exemple !
+                    </li>
+                </ul>
+            </div>
+        </div><!-- fin de la rangée -->
+
+        <div class="row m-2 border p-2">
+            <div class="col-12">
+                <h2 class="text-center" id="insert">3 - Quelques exercices // Mettez la requête que vous faites dans une
+                    balise code à l'intérieur de la li</h2>
+            </div>
+
+            <div class="col-12">
+                <ul>
+                    <li>Afficher la profession de l'employé 547 :
+                        <code> SELECT service FROM employes WHERE id_employes = 547;</code>
+                    </li>
+                    <li>Afficher la date d'embauche d'Amandine :
+                        <code>SELECT date_embauche FROM employes WHERE prenom='Amandine';</code>
+                    </li>
+                    <li>Afficher le nombre de commerciaux :
+                        <code> SELECT COUNT(*) AS nombre_commerciaux FROM employes WHERE service='commercial';</code>
+                    </li>
+                    <li>Afficher le coût des commerciaux sur une année :
+                        <code>SELECT SUM(salaire*12) AS salaire_annuel_commercial FROM employes WHERE service = 'commercial';</code>
+                    </li>
+                    <li>Afficher le salaire moyen par service :
+                        <code>SELECT service, AVG(salaire) AS salaire_moyen FROM employes GROUP BY service;</code>
+                    </li>
+                    <li>Afficher le nombre de recrutement sur l'année 2010 :
+                        <code> SELECT date_embauche, COUNT(*) AS nb_recrutement_2010 FROM employes WHERE date_embauche BETWEEN '2010-01-01' AND '2010-12-31' GROUP BY date_embauche;</code> <br>
+                        <code>SELECT COUNT(*) AS 'nbr de recrutements - 2010' FROM employes WHERE date_embauche LIKE '2010%';</code> <br>
+                        <code>SELECT COUNT(*) AS 'nbr de recrutements - 2010' FROM employes WHERE date_embauche >= '2010-01-01' AND date_embauche <= '2010-12-31';</code>
+                    </li>
+                    <li>Augmenter le salaire pour chaque employé de 100€ :
+                        <code> UPDATE employes SET salaire=salaire+100;</code>
+                    </li>
+                    <li>Afficher le nombre de service :
+                        <code> SELECT COUNT(DISTINCT service) AS 'nombre de services' FROM employes;</code>
+                    </li>
+                    <li>Afficher les informations de l'employé du service commercial gagnant le salaire le plus élevé :
+                        <code>SELECT * FROM employes WHERE salaire=(SELECT MAX(salaire) FROM employes WHERE service='commercial');</code>
+                    </li>
+                    <li>Afficher l'employé ayant été embauché en dernier :
+                        <code>SELECT * FROM employes WHERE date_embauche IN(SELECT MAX(date_embauche) FROM employes);</code>
+                    </li>
+                </ul>
+            </div>
+
+        </div><!-- fin de la rangée -->
+    </main>
+
+
+    <!-- Bootstrap JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
+        </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
+        integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
+        </script>
+</body>
+
+</html>
